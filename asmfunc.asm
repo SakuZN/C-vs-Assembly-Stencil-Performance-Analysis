@@ -4,10 +4,10 @@ section .text
 	bits 64
 	default rel ; support address relocation and relativity
 
-global calc1D_Stencil
+global calc1D_Stencil_asmfunc
 extern printf
 ; vectorX -> [RCX], vectorY -> [RDX], size -> R8
-calc1D_Stencil:
+calc1D_Stencil_asmfunc:
     
     push rsi
     push rbp 
