@@ -45,11 +45,24 @@ int main() {
 		vectorX[i] = ((double)rand() / (double)RAND_MAX) * 100.0;
 	}
 
-	// Calculate the 1D stencil
-	calc1D_Stencil(vectorX, vectorY, size);
+	//print the values first
+	//calc1D_Stencil(vectorX, vectorY, size);
+	//printVectorY(vectorY, vectorYSize);
 
-	// Print the vectorY
-	printVectorY(vectorY, vectorYSize);
+	
+	// Calculate the time taken by calc1D_Stencil() 
+	clock_t t;
+	t = clock();
+
+	// Repeat the stencil computation multiple times
+	for (int i = 0; i < 1000; ++i) {
+		calc1D_Stencil(vectorX, vectorY, size);
+	}
+
+	t = clock() - t;
+	double time_taken = ((double)t) / CLOCKS_PER_SEC; // in seconds 
+
+	printf("\ncalc1D_Stencil() took %f seconds in average to execute \n", time_taken / 1000); // average per run
 
 	free(vectorX);
 	free(vectorY);
