@@ -8,27 +8,32 @@ void calc1D_Stencil(double* vectorX, double* vectorY, int size);
 void printVectorY(double* vectorY, int size);
 int main() {
 
-	/*
 	int exponentSize = 0;
 	int runTime = 0;
 	//Get the size of the exponent
 	printf("Enter the size of Vector X (in 2^x min 3): ");
-	scanf("%d", &exponentSize);
+	scanf_s("%d", &exponentSize);
 	while (exponentSize < 3) {
 		printf("Enter the size of Vector X (in 2^x min 3): ");
-		scanf("%d", &exponentSize);
+		scanf_s("%d", &exponentSize);
 	}
+	/*
 	//Get the number of times to run the program
 	printf("Enter the number of times to run the program: ");
 	scanf("%d", &runTime);
-	int size = pow(2, exponentSize);
+	*/
+	int size = (int)(pow(2, exponentSize) + 0.5);
+	printf("Size of Vector X: %d\n", size);
+	int vectorYSize = size - 6;
 
 	double* vectorX = (double*)malloc(size * sizeof(double));
 	// size of vectorY is n - 6
-	double* vectorY = (double*)malloc((size - 6) * sizeof(double));
+	double* vectorY = (double*)malloc((vectorYSize) * sizeof(double));
 
-	if (vectorX == NULL) {
+	if (vectorX == NULL || vectorY == NULL) {
 		fprintf(stderr, "Memory allocation failed\n");
+		free(vectorX);
+		free(vectorY);
 		return 1;
 	}
 
@@ -40,14 +45,15 @@ int main() {
 		vectorX[i] = ((double)rand() / (double)RAND_MAX) * 100.0;
 	}
 
+	// Calculate the 1D stencil
+	calc1D_Stencil(vectorX, vectorY, size);
+
+	// Print the vectorY
+	printVectorY(vectorY, vectorYSize);
+
 	free(vectorX);
-	*/
-
-	double vectorX[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	double vectorY[3] = { 0, 0, 0 };
-
-	calc1D_Stencil(&vectorX, &vectorY, 9);
-	printVectorY(&vectorY, 9);
+	free(vectorY);
+	
 
 
 
@@ -55,7 +61,7 @@ int main() {
 }
 
 void calc1D_Stencil(double* vectorX, double* vectorY, int size) {
-	int limit = (size - 6) + 4;
+	int limit = size - 3;
 	int yIndex = 0;
 	for (int i = 3; i < limit; i++) {
 		vectorY[yIndex] = (vectorX[i - 3] + vectorX[i - 2] + vectorX[i - 1] + vectorX[i] + vectorX[i + 1] + vectorX[i + 2] + vectorX[i + 3]);
@@ -64,7 +70,7 @@ void calc1D_Stencil(double* vectorX, double* vectorY, int size) {
 }
 
 void printVectorY(double* vectorY, int size) {
-	for (int i = 0; i < (size - 6); i++) {
-		printf("%f\n", vectorY[i]);
+	for (int i = 0; i < size; i++) {
+		printf("Y[%d] = %f\n", i, vectorY[i]);
 	}
 }
