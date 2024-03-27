@@ -48,10 +48,10 @@ int main() {
 	
 	*/
 
-	double* vectorX = (double*)malloc(size * sizeof(double));
-	double* vectorY = (double*)malloc((vectorYSize) * sizeof(double));
-	double* vectorX_asm = (double*)malloc(size * sizeof(double));
-	double* vectorY_asm = (double*)malloc((vectorYSize) * sizeof(double));
+	double* vectorX = malloc(size * sizeof(double));
+	double* vectorY = malloc((vectorYSize) * sizeof(double));
+	double* vectorX_asm = malloc(size * sizeof(double));
+	double* vectorY_asm = malloc((vectorYSize) * sizeof(double));
 
 	// Check if memory allocation was successful
 	
