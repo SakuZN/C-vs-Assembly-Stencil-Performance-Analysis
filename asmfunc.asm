@@ -16,7 +16,7 @@ calc1D_Stencil_asmfunc:
         xor rbx, rbx    ; initialize for int i in for loop 
         xor r12, r12    ; for vectorX indexing
         xor r11, r11    ; for vectorY indexing (yIndex)
-        xor r10, r10    ; initialize for limit variable in code: limit = (size - 6) + 3;
+        xor r10, r10    ; initialize for limit variable in code: limit = size - 3
         add r10, r8     ; limit = limit + size
         sub r10, 3      ; limit = limit - 3
 

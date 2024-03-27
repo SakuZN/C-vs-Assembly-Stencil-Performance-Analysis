@@ -8,7 +8,7 @@ extern double calc1D_Stencil_asmfunc(double* vectorX, double* vectorY, int size)
 void calc1D_Stencil(double* vectorX, double* vectorY, int size);
 void printVectorY(double* vectorY, int size);
 double calculateAverage(const double timings[], int numElements);
-void writeTimingsToCSV(const double cTimings[], const double asmTimings[], int iterations, int exponent);
+void writeTimingsToCSV(const double cTimings[], const double asmTimings[], int iterations, int exponent, int isDebugMode);
 int main() {
 
 	int exponentSize = 0;
@@ -17,19 +17,44 @@ int main() {
 	//Get the size of the exponent
 	printf("Enter the size of Vector X (in 2^x min 3): ");
 	scanf_s("%d", &exponentSize);
-	while (exponentSize < 3) {
+	while (exponentSize < 3 || exponentSize > 30) {
+
+		if (exponentSize < 3)
+			printf("Size of Vector X is too small, please enter a size greater than 3\n\n");
+		else
+			printf("Size of Vector X is too large, please enter a size less than 30\n\n");
+
 		printf("Enter the size of Vector X (in 2^x min 3): ");
 		scanf_s("%d", &exponentSize);
 	}
+	/*
+	printf("Is program in debug mode? (1 for yes, 0 for no): ");
+	int debugMode = 0;
+	scanf_s("%d", &debugMode);
+
+	while (debugMode != 0 && debugMode != 1) {
+		printf("Invalid input, please enter 1 for yes or 0 for no\n\n");
+		printf("Is program in debug mode? (1 for yes, 0 for no): ");
+		scanf_s("%d", &debugMode);
+	}
+	*/
+	
 
 	int size = (int)(pow(2, exponentSize) + 0.5);
 	printf("Size of Vector X: %d\n", size);
 	int vectorYSize = size - 6;
 
+	/*
+	
+	*/
+
 	double* vectorX = (double*)malloc(size * sizeof(double));
 	double* vectorY = (double*)malloc((vectorYSize) * sizeof(double));
 	double* vectorX_asm = (double*)malloc(size * sizeof(double));
 	double* vectorY_asm = (double*)malloc((vectorYSize) * sizeof(double));
+
+	// Check if memory allocation was successful
+	
 
 	if (vectorX == NULL || vectorY == NULL || vectorX_asm == NULL || vectorY_asm == NULL) {
 		fprintf(stderr, "Memory allocation failed\n");
@@ -60,6 +85,8 @@ int main() {
 	//Check if the values are the same
 	int error = 0;
 	for (int i = 0; i < vectorYSize; i++) {
+		printf("C function: %f\n", vectorY[i]);
+		printf("Assembly function: %f\n", vectorY_asm[i]);
 		if (vectorY[i] != vectorY_asm[i]) {
 			printf("\nError: C function and Assembly function do not match at index %d\n", i);
 			error = 1;
@@ -98,7 +125,7 @@ int main() {
 	}
 
 	printf("Outputting the results to a CSV file...\n");
-	writeTimingsToCSV(c_times, asm_times, runTime, exponentSize);
+	//writeTimingsToCSV(c_times, asm_times, runTime, exponentSize, debugMode);
 	printf("Results have been outputted to a CSV file\n");
 
 	free(vectorX);
@@ -133,16 +160,15 @@ double calculateAverage(const double timings[], int numElements) {
 }
 
 // Function to write the timing data to a CSV file
-void writeTimingsToCSV(const double cTimings[], const double asmTimings[], int iterations, int exponent) {
+void writeTimingsToCSV(const double cTimings[], const double asmTimings[], int iterations, int exponent, int isDebugMode) {
 	char fileName[100];
 
 	// Determine the file name based on the compilation mode and exponent size
-	#ifndef NDEBUG
+	if (isDebugMode)
 		sprintf_s(fileName, sizeof(fileName), "Comparison_Analysis_Debug_2^%d.csv", exponent);
-	#else
+	else
 		sprintf_s(fileName, sizeof(fileName), "Comparison_Analysis_Release_2^%d.csv", exponent);
-	#endif
-
+	
 	// Open the file for writing
 	FILE* file = fopen(fileName, "w");
 	if (file == NULL) {
