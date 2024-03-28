@@ -13,6 +13,7 @@ int main() {
 
 	int exponentSize = 0;
 	const int runTime = 50;
+	int isAssemblyFuncSuccess = 0;
 
 	//Get the size of the exponent
 	printf("Enter the size of Vector X (in 2^x min 3): ");
@@ -29,7 +30,7 @@ int main() {
 	}
 	/*
 	printf("Is program in debug mode? (1 for yes, 0 for no): ");
-	int debugMode = 0;
+	
 	scanf_s("%d", &debugMode);
 
 	while (debugMode != 0 && debugMode != 1) {
@@ -38,14 +39,14 @@ int main() {
 		scanf_s("%d", &debugMode);
 	}
 	*/
-	
+	int debugMode = 0;
 
 	int size = (int)(pow(2, exponentSize) + 0.5);
 	printf("Size of Vector X: %d\n", size);
 	int vectorYSize = size - 6;
 
 	/*
-	
+
 	*/
 
 	double* vectorX = malloc(size * sizeof(double));
@@ -54,8 +55,6 @@ int main() {
 	double* vectorY_asm = malloc((vectorYSize) * sizeof(double));
 
 	// Check if memory allocation was successful
-	
-
 	if (vectorX == NULL || vectorY == NULL || vectorX_asm == NULL || vectorY_asm == NULL) {
 		fprintf(stderr, "Memory allocation failed\n");
 		free(vectorX);
@@ -80,13 +79,14 @@ int main() {
 	//Do a single run for the C function and assembly function for sanity check
 	printf("\nRunning the C function once...\n");
 	calc1D_Stencil(vectorX, vectorY, size);
+
 	printf("Running the Assembly function once...\n");
-	calc1D_Stencil_asmfunc(vectorX_asm, vectorY_asm, size);
+	isAssemblyFuncSuccess = calc1D_Stencil_asmfunc(vectorX_asm, vectorY_asm, size);
 	//Check if the values are the same
 	int error = 0;
 	for (int i = 0; i < vectorYSize; i++) {
-		printf("C function: %f\n", vectorY[i]);
-		printf("Assembly function: %f\n", vectorY_asm[i]);
+		//printf("C function: %f\n", vectorY[i]);
+		//printf("Assembly function: %f\n", vectorY_asm[i]);
 		if (vectorY[i] != vectorY_asm[i]) {
 			printf("\nError: C function and Assembly function do not match at index %d\n", i);
 			error = 1;
@@ -97,10 +97,13 @@ int main() {
 	}
 	else {
 		printf("C function and Assembly function do not match\n");
+		/*
 		free(vectorX);
 		free(vectorY);
 		free(vectorX_asm);
 		free(vectorY_asm);
+		*/
+
 		return 1;
 	}
 
@@ -116,22 +119,21 @@ int main() {
 		c_times[i] = (double)(end - start) / CLOCKS_PER_SEC;
 	}
 
+
 	printf("Running the Assembly function 50 times...\n\n");
 	for (int i = 0; i < runTime; i++) {
 		clock_t start = clock();
-		calc1D_Stencil_asmfunc(vectorX_asm, vectorY_asm, size);
+		//double start_double = (double)start;
+		isAssemblyFuncSuccess = calc1D_Stencil_asmfunc(vectorX_asm, vectorY_asm, size);
 		clock_t end = clock();
+		//double end_double = (double)end;
 		asm_times[i] = (double)(end - start) / CLOCKS_PER_SEC;
 	}
 
 	printf("Outputting the results to a CSV file...\n");
-	//writeTimingsToCSV(c_times, asm_times, runTime, exponentSize, debugMode);
+	writeTimingsToCSV(c_times, asm_times, runTime, exponentSize, debugMode);
 	printf("Results have been outputted to a CSV file\n");
 
-	free(vectorX);
-	free(vectorY);
-	free(vectorX_asm);
-	free(vectorY_asm);
 
 	return 0;
 }
@@ -168,7 +170,7 @@ void writeTimingsToCSV(const double cTimings[], const double asmTimings[], int i
 		sprintf_s(fileName, sizeof(fileName), "Comparison_Analysis_Debug_2^%d.csv", exponent);
 	else
 		sprintf_s(fileName, sizeof(fileName), "Comparison_Analysis_Release_2^%d.csv", exponent);
-	
+
 	// Open the file for writing
 	FILE* file = fopen(fileName, "w");
 	if (file == NULL) {
