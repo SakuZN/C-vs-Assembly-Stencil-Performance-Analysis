@@ -28,6 +28,7 @@ While the limitation can vary depending on the specifications of the computer, t
 | Vector X value assignment |
 | ---------------------- |
 |![rand val assignment](https://github.com/SakuZN/C-vs-Assembly-Stencil-Performance-Analysis/assets/106810417/c71dd3e0-fb98-4c95-b236-fe88a9a6e4ca)
+
 $\ Vector X$  is assigned with random double-precision floating-point values. This is then copied to $\ Vector X_{asm}$, which holds values for the assembly function to read from.
 
 # 1-D Stencil Operation Implementation
