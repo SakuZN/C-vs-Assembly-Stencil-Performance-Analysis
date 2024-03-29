@@ -17,7 +17,22 @@ It also shows the average of the entire iteration for a more straightforward ana
 |![malloc](https://github.com/SakuZN/C-vs-Assembly-Stencil-Performance-Analysis/assets/106810417/fa093b71-ffc3-4b91-a045-26c738dc39bd)|![Limitations](https://github.com/SakuZN/C-vs-Assembly-Stencil-Performance-Analysis/assets/106810417/78aa4c8e-cbb2-4b89-b8f1-db95d0bec0e9)
 
 
-Because C does not support dynamically assigned array size using variables. The use of malloc is needed to allocate the size of $\ Vector X$ and $\ Vector Y$ dynamically.
- However malloc still comes with its constraints, that is it is ultimately limited by the current user's available RAM or system memory.
- Thus, the allocation of very large blocks of memory could lead to allocation failures. As seen in the figure above, $\ 2^30$ size allocation crashes the program.
- While the limitation can vary depending on the specifciations of the computer, the maximum size the test was conducted is $\ 2^28$
+Because C does not support dynamically assigned array size using variables, the use of malloc is needed to allocate the size of $\ Vector X$ and $\ Vector Y$ dynamically.
+However, malloc still comes with its constraints, which are ultimately limited by the current user's available RAM or system memory.
+Thus, allocating huge blocks of memory could lead to allocation failures. The figure above shows that $\ 2^{30}$ size allocation crashes the program.
+While the limitation can vary depending on the specifications of the computer, the maximum size the test was conducted is $\ 2^{28}$.
+
+# Random Value Assignment
+| Vector X value assignment |
+| ---------------------- |
+|![rand val assignment](https://github.com/SakuZN/C-vs-Assembly-Stencil-Performance-Analysis/assets/106810417/c71dd3e0-fb98-4c95-b236-fe88a9a6e4ca)
+$\ Vector X$  is assigned with random double-precision floating-point values. This is then copied to $\ Vector X_{asm}$ which holds values for the assembly function to read from.
+
+# 1-D Stencil Operation Implementation
+| C Function             | Assembly Function      |
+| ---------------------- | ---------------------- |
+|![c function](https://github.com/SakuZN/C-vs-Assembly-Stencil-Performance-Analysis/assets/106810417/d496d77b-747d-4204-9381-e08b82c3e6ac)|![assembly func](https://github.com/SakuZN/C-vs-Assembly-Stencil-Performance-Analysis/assets/106810417/f9030ba0-56d5-4d61-a4bb-b178dc74f74c)
+
+Both the C and assembly functions implement a 1-dimensional stencil operation. This operation iterates through a $\ Vector X$  and calculates a new value for each element in the output $\ Vector Y$.<br> <br> 
+The calculation involves summing the current element ($\ X[i]$) with its 3 predecessors ($\ X[i - 3]$, $\ X[i - 2]$, $\ X[i - 1]$) <br> 
+and 3 successors ($\ X[i + 3]$, $\ X[i + 2]$, $\ X[i + 1]$).
