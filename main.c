@@ -88,7 +88,7 @@ int main() {
 	printf("\nSanity Check:\n");
 
 	//Do a single run for the C function and assembly function for sanity check
-	printf("\nRunning the C function once...\n");
+	printf("Running the C function once...\n");
 	calc1D_Stencil(vectorX, vectorY, size);
 
 	printf("Running the Assembly function once...\n");
@@ -96,6 +96,14 @@ int main() {
 	//Check if the values are the same
 	int error = 0;
 	for (int i = 0; i < vectorYSize; i++) {
+		//print the first 10 values of vectorY and vectorY_asm
+		if (i < 10) {
+			printf("    Y[%d] = %f\n", i, vectorY[i]);
+			printf("Y_asm[%d] = %f\n", i, vectorY_asm[i]);
+		}
+		else if (i == 10) {
+			printf("Checking rest of values...\n");
+		}
 		if (vectorY[i] != vectorY_asm[i]) {
 			printf("\nError: C function and Assembly function values do not match at index %d\n", i);
 			error = 1;
