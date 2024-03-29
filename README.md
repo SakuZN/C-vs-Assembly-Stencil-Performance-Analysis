@@ -68,7 +68,7 @@ where $\ n$  is the size of the input array. This is because it performs a const
 | ---------------------- | ---------------------- |
 |![sanity check](https://github.com/SakuZN/C-vs-Assembly-Stencil-Performance-Analysis/assets/106810417/2038c977-0679-4801-9de4-a42aff8694c2)|![sanity check output](https://github.com/SakuZN/C-vs-Assembly-Stencil-Performance-Analysis/assets/106810417/6efe9d14-db07-4fb6-9991-15f6594537da)
 
-The program includes a correctness check by comparing the output of the assembly implementation to the C implementation. If the outputs don't match, the program terminates, signaling a potential implementation error or a fatal issue (e.g., stack misalignment) in the assembly function.
+The program includes a correctness check by comparing the output of the assembly implementation to the C implementation. If the outputs don't match, the program terminates, signaling a potential implementation error or a fatal issue (e.g., stack misalignment) in the assembly function. This is an important part of the program as it ensures consistency and fairness of function comparison.
 
 # Performance Testing
 ## Methodology
@@ -120,5 +120,17 @@ The table shows the execution times of a 1D stencil operation implemented in C a
 |![2^28 release](https://github.com/SakuZN/C-vs-Assembly-Stencil-Performance-Analysis/assets/106810417/5c064728-166b-489d-a2d9-99777f3cb969)|![2^28 release output](https://github.com/SakuZN/C-vs-Assembly-Stencil-Performance-Analysis/assets/106810417/9fa1cf57-af7b-422e-aa64-140480831cf2)
 
 
-The C implementation has an average time of $\ 0.00146(s)$, showing a significant improvement over the Debug mode due to compiler optimizations. The Assembly implementation maintains consistent performance with an average time of $\ 0.00152(s)$, slightly slower than the C version in this case. This demonstrates the power of compiler optimizations in Release mode, which can sometimes result in high-level language implementations outperforming hand-optimized Assembly code.
+The C implementation has an average time of $\ 0.368360(s)$, showing a substantial improvement over the Debug mode due to compiler optimizations. The Assembly implementation maintains consistent performance with an average time of $\ 0.390240(s)$, also slightly slower than the C version in this case. This is impressive considering the average time difference of the test in debug mode, showcasing the power of modern compilers and their optimizations.
+
+# Conclusion
+
+Based on the analysis of the execution times for the 1D stencil operation implemented in C and Assembly, it can be concluded that both languages have their strengths and use cases.
+
+
+In scenarios where raw performance and consistent execution across debug and release modes are paramount, especially with large datasets, assembly is the better choice. This is due to its low-level nature, allowing for fine-grained optimizations that often outpace compiler-generated code. However, modern compilers today are very sophisticated, and our release mode tests illustrate this. Compiler optimizations significantly boosted C's performance, often matching or even exceeding that of the handcrafted assembly implementation.
+
+Still, Assembly remains a powerful tool for performance-critical scenarios in system software, game development, or real-time applications where absolute control is essential.  However, its complexity, potential portability issues, and less intuitive debugging make it less suitable for general-purpose programming tasks.  
+
+
+C, and other high-level languages offer a compelling balance of performance, readability, and development speed for most applications.  If complex algorithms are used within a project, and the utmost performance is desired, Assembly can be selectively used to optimize hotspots, as seen in our tests.  With ever-improving compilers, the performance gap between high-level languages and assembly is narrowing. Therefore, choosing between C and Assembly necessitates carefully considering development time, code maintainability, portability, and the performance demands of the project.
 
