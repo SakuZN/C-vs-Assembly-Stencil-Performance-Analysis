@@ -3,6 +3,17 @@
 #include <math.h>
 #include <time.h>
 
+/*
+	Pair-Activity MP2
+	Member 1:
+	Name: Zach Matthew B. Noche
+	Section: S13
+	Member 2:
+	Name: Wesly Franco Samson
+	Section: S13
+*/
+
+
 // vectorX -> [RCX], vectorY -> [RDX], size -> R8
 extern double calc1D_Stencil_asmfunc(double* vectorX, double* vectorY, int size);
 void calc1D_Stencil(double* vectorX, double* vectorY, int size);
