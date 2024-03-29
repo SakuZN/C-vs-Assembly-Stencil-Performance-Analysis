@@ -15,7 +15,7 @@ calc1D_Stencil_asmfunc:
     push rbp 
     mov rbp, rsp
     add rbp, 16
-    add rbp, 32 ; +32 for 4 additional pushes (rsi, rbx, r12, and r13)
+    add rbp, 32 ; +32 for 4 additional pushes 
         xor rax, rax    ; return integer
         xor rbx, rbx    ; initialize for int i in for loop 
         xor r13, r13    ; for vectorY reference

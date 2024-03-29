@@ -52,16 +52,17 @@ This function is a straightforward implementation of a 1D stencil operation in C
 where $\ n$  is the size of the input array. This is because it performs a constant amount of work for each element in the array. The function does not use any advanced C features or optimizations, so its performance is determined mainly by the CPU speed and the C compiler's efficiency.
 
 ## Assembly Function Algorithm Breakdown
-- 1. <b>Setup</b>:  The function begins by pushing the registers $\  RSI, RBX, R12, R13, RBP$ onto the stack to save their original values. It then sets up the stack frame by moving the stack pointer $\ RSP$ into the base pointer $\ RBP$, and adding 48 to $\ RBP$ to account for the space used by the pushed registers.
+- 1. <b>Setup</b>:  The function begins by pushing the non-volatile registers $\  RSI, RBX, R12, and R13$ and the base pointer register $\ RBP$ onto the stack to save their original values and restore them later on after the function call to ensure the assembly function's consistency and predictability. It then sets up the stack frame by moving the stack pointer $\ RSP$ into the base pointer $\ RBP$, and adding a total of 48 to $\ RBP$ to account for the space used by the pushed registers and point the base pointer $\ RBP$ into the first shadow space.
   
 - 2. <b>Initialization</b>: The function initializes several registers to zero $\ (RAX, RBX, R13, R12, R11, R10) $. It calculates the limit as $\ size - 3$ $\ 
- (R10 = R8 - 3)$ to avoid out-of-bounds access. It sets up pointers to the input and output arrays $\ (RSI = RCX, R13 = RDX)$.
+ (R10 = R8 - 3)$ to avoid out-of-bounds access. The $\RBX$ register's starting value is set to 3 ($\ i$ = 3 where i is the starting middle input element with three predecessors and three successors to be summed overall and outputted to vectorY). Furthermore, the $\ RSI and RDX$ registers are set as pointers to the input and output arrays $\ (RSI = RCX (vectorX), R13 = RDX (vectorY))$ through the LEA instruction.
 
-- 3. <b>Loop</b>: The function enters a loop that continues until the loop counter $\ RBX$ equals the limit $\ R10$. In each iteration, it uses the SIMD instruction $\ addsd$ to add double-precision floating-point values from the input array, and stores the result in the output array at the current index. It increments the output array index $\ R11$ and the loop counter $\ RBX$ after each iteration.
+- 3. <b>Loop</b>: The function enters a loop that continues until the loop counter $\ RBX$ equals the limit ($\ R10$). In each iteration, it uses the SIMD instruction $\ addsd$ to sum seven (starting from i - 3 until i + 3) double-precision floating-point values from the input array and store each sum result in the output array based on the current vectorY ($\ R11$) index. It increments the output array index $\ R11$ and the loop counter $\ RBX$ after each iteration.
 
-- 4. <b>End</b>: If the function was successful, it sets $\ RAX$ to 1. It then pops the original values of $\ RBP, R13, R12, RBX, RSI$ off the stack to restore their original values. Finally, it returns from the function.
+- 4. <b>End</b>: If the function was successful, it sets $\ RAX$ to 1 and returns the register's value. It then pops the original non-volatile values of $\ RBP, R13, R12, RBX, RSI$ off the stack to restore their original values and maintain the program's consistency and predictability. Finally, it returns from the function.
 <br>
-(Add Explanation Here)
+
+This assembly function is the exact equivalent of the previous implemented C stencil operation function. The function contains only one loop that iterates over vectorX (input array) starting at i = 3 until i equals the limit (vectorX size - 3) where each iteration sums a total of seven elements (the i-th element and its three predecessors and three successors) from vectorX and outputs the sum result to vectorY. Afterwards, the registers representing the vectorX and vectorY indices are incremented until all valid combination of sevent input elements from vectorX are taken into account and outputted to vectorY. This function has a time complexity of $\ O(n - 3)$ or simply $\ O(n)$, where n is the size of vectorX (input array). Same with the previous C implementation, this function does not use advanced or complicated algorithms or workarounds and is merely implemented to copy the exact algorithm and time complexity of the previously implemented C function.
 
 # Sanity Check
 | Code Implementation    | Code Output            |
