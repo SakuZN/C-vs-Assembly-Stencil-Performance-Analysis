@@ -28,7 +28,7 @@ int main() {
 		printf("Enter the size of Vector X (in 2^x min 3): ");
 		scanf_s("%d", &exponentSize);
 	}
-	/*
+	int debugMode = 0;
 	printf("Is program in debug mode? (1 for yes, 0 for no): ");
 	
 	scanf_s("%d", &debugMode);
@@ -38,16 +38,14 @@ int main() {
 		printf("Is program in debug mode? (1 for yes, 0 for no): ");
 		scanf_s("%d", &debugMode);
 	}
-	*/
-	int debugMode = 0;
+	
+	
 
 	int size = (int)(pow(2, exponentSize) + 0.5);
 	printf("Size of Vector X: %d\n", size);
 	int vectorYSize = size - 6;
 
-	/*
-
-	*/
+	printf("\nAllocating memory for vectors...\n");
 
 	double* vectorX = malloc(size * sizeof(double));
 	double* vectorY = malloc((vectorYSize) * sizeof(double));
@@ -76,6 +74,8 @@ int main() {
 		vectorX_asm[i] = vectorX[i];
 	}
 
+	printf("\nSanity Check:\n");
+
 	//Do a single run for the C function and assembly function for sanity check
 	printf("\nRunning the C function once...\n");
 	calc1D_Stencil(vectorX, vectorY, size);
@@ -85,25 +85,20 @@ int main() {
 	//Check if the values are the same
 	int error = 0;
 	for (int i = 0; i < vectorYSize; i++) {
-		//printf("C function: %f\n", vectorY[i]);
-		//printf("Assembly function: %f\n", vectorY_asm[i]);
 		if (vectorY[i] != vectorY_asm[i]) {
-			printf("\nError: C function and Assembly function do not match at index %d\n", i);
+			printf("\nError: C function and Assembly function values do not match at index %d\n", i);
 			error = 1;
 		}
 	}
 	if (error == 0) {
-		printf("C function and Assembly function match, proceeding with test\n\n");
+		printf("C function and Assembly function values match, proceeding with test\n\n");
 	}
 	else {
-		printf("C function and Assembly function do not match\n");
-		/*
+		printf("C function and Assembly function values do not match\n");
 		free(vectorX);
 		free(vectorY);
 		free(vectorX_asm);
 		free(vectorY_asm);
-		*/
-
 		return 1;
 	}
 
@@ -123,10 +118,8 @@ int main() {
 	printf("Running the Assembly function 50 times...\n\n");
 	for (int i = 0; i < runTime; i++) {
 		clock_t start = clock();
-		//double start_double = (double)start;
 		isAssemblyFuncSuccess = calc1D_Stencil_asmfunc(vectorX_asm, vectorY_asm, size);
 		clock_t end = clock();
-		//double end_double = (double)end;
 		asm_times[i] = (double)(end - start) / CLOCKS_PER_SEC;
 	}
 
@@ -196,7 +189,7 @@ void writeTimingsToCSV(const double cTimings[], const double asmTimings[], int i
 	// Write the averages at the end of the file
 	double cAverage = calculateAverage(cTimings, iterations);
 	double asmAverage = calculateAverage(asmTimings, iterations);
-	fprintf(file, "\n, , Average Time: %f, Average Time: %f\n", cAverage, asmAverage);
+	fprintf(file, "\n, , Average Time (s): %f, Average Time (s): %f\n", cAverage, asmAverage);
 
 	// Close the file
 	fclose(file);
