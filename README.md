@@ -4,6 +4,29 @@ The C function serves as a baseline, while the assembly version demonstrates per
 <br><br>
 This <b>README</b> provides a detailed analysis of the program and the performance differences of the function implementations.
 
+# Table of Contents
+- [Introduction](#introduction)
+- [x86-to-C Interface Program](#x86-to-c-interface-program)
+- [Vector Size Allocation](#vector-size-allocation)
+- [Random Value Assignment](#random-value-assignment)
+- [1-D Stencil Operation Implementation](#1-d-stencil-operation-implementation)
+   - [C Function Algorithm Breakdown](#c-function-algorithm-breakdown)
+   - [Assembly Function Algorithm Breakdown](#assembly-function-algorithm-breakdown)
+- [Sanity Check](#sanity-check)
+- [Performance Testing](#performance-testing)
+   - [Methodology](#methodology)
+   - [Input size $\ 2^{20}$ Test](#input-size--220-test)
+        - [Debug Mode](#debug-mode)
+        - [Release Mode](#release-mode)
+   - [Input size $\ 2^{24}$ Test](#input-size--224-test)
+        - [Debug Mode](#debug-mode-1)
+        - [Release Mode](#release-mode-1)
+   - [Input size $\ 2^{28}$ Test](#input-size--228-test)
+        - [Debug Mode](#debug-mode-2)
+        - [Release Mode](#release-mode-2)
+- [Conclusion](#conclusion)
+
+
 # x86-to-C Interface Program
 | Input                  | Output             |
 | ---------------------- | ---------------------- |
