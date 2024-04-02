@@ -25,7 +25,7 @@ This <b>README</b> provides a detailed analysis of the program and the performan
         - [Debug Mode](#debug-mode-2)
         - [Release Mode](#release-mode-2)
 - [Conclusion](#conclusion)
-
+- [Authors](#authors)
 
 # x86-to-C Interface Program
 | Input                  | Output             |
@@ -159,3 +159,6 @@ Still, Assembly remains a powerful tool for performance-critical scenarios in sy
 
 C, and other high-level languages offer a compelling balance of performance, readability, and development speed for most applications.  If complex algorithms are used within a project, and the utmost performance is desired, Assembly can be selectively used to optimize hotspots, as seen in our tests.  With ever-improving compilers, the performance gap between high-level languages and assembly is narrowing. Therefore, choosing between C and Assembly necessitates carefully considering development time, code maintainability, portability, and the performance demands of the project.
 
+# Authors
+- Noche, Zach Matthew B. Noche
+- Samson, Wesly Franco
